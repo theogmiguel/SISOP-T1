@@ -24,7 +24,7 @@ public class ProcessManager {
     private int pcbId;    
     private CPU cpu;
     private MemoryManager memoryManager;
-    private HashMap<Integer, PCB> pcbList;
+    public HashMap<Integer, PCB> pcbList;
     private HashMap<Integer, PCB> readyList;
     private int runningPCB;
 
@@ -33,6 +33,7 @@ public class ProcessManager {
         this.cpu = cpu;
         this.memoryManager = memoryManager;
         this.readyList = new HashMap<>();
+        this.pcbList = new HashMap<>();
         this.runningPCB = 0;
     }
 
@@ -42,6 +43,8 @@ public class ProcessManager {
 
         int[] allocation = memoryManager.allocate(program.length);
         if(allocation.length == 0) return false;
+
+        memoryManager.loadProgram(program, allocation);
 
         PCB newPCB = new PCB();
         newPCB.partitions = allocation;
@@ -65,4 +68,16 @@ public class ProcessManager {
 
     }
 
+    public void executeProcess(int processId){
+
+        PCB process = pcbList.get(processId);
+
+        if (process == null){
+          System.out.println("Processo inexistente");
+          return; 
+        }
+        cpu.setContext(0, memoryManager.memSize-1, 0);
+        cpu.run();
+
+    }
 }

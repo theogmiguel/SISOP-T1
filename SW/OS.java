@@ -27,27 +27,31 @@ public class OS {
 					case "cria":
 						switch (inputList[1]) {
 							case "fibonacci10":
-								//System.out.println(s.loadProgram(progs.fibonacci10));
+								System.out.println(processManager.createProcess(progs.fibonacci10));
+								
 								break;
 							case "progMinimo":
-								//System.out.println(s.loadProgram(progs.progMinimo));
+								System.out.println(processManager.createProcess(progs.progMinimo));
 								break;
 							case "fatorial":
-								//System.out.println(s.loadProgram(progs.fatorial));
+								System.out.println(processManager.createProcess(progs.fatorial));
 								break;
 							case "fatorialTRAP":
-								//System.out.println(s.loadProgram(progs.fibonacci10));
+								System.out.println(processManager.createProcess(progs.fibonacci10));
 								break;
 							case "fibonacciTRAP":
-								//System.out.println(s.loadProgram(progs.fibonacci10));
+								System.out.println(processManager.createProcess(progs.fibonacci10));
 								break;
 							case "PC":
-								//System.out.println(s.loadProgram(progs.PC));
+								System.out.println(processManager.createProcess(progs.PC));
 								break;
 							default:
 								System.out.println("Programa não encontrado");
 								break;
 						}
+						break;
+					case "lista":
+						System.out.println(processManager.pcbList);
 						break;
 					case "dump":
 						break;
@@ -56,6 +60,7 @@ public class OS {
 					case "dumpM":
 						break;
 					case "executa":
+						processManager.executeProcess(Integer.parseInt(inputList[1]));
 						break;
 					case "traceOn":
 						break;
