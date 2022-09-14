@@ -18,7 +18,6 @@ public class CPU {
 
     private Memory mem;               // mem tem funcoes de dump e o array m de memória 'fisica' 
     private Word[] m;                 // CPU acessa MEMORIA, guarda referencia a 'm'. m nao muda. semre será um array de palavras
-    private int frameSize;
 
     private boolean debug;            // se true entao mostra cada instrucao em execucao
                     
@@ -33,7 +32,6 @@ public class CPU {
 
     public CPU(Memory _mem, int _frameSize){
         mem = _mem;
-        frameSize = _frameSize;
     }
 
     public void trap() {   // apenas avisa - todas interrupcoes neste momento finalizam o programa
