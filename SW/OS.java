@@ -28,7 +28,6 @@ public class OS {
 						switch (inputList[1]) {
 							case "fibonacci10":
 								System.out.println(processManager.createProcess(progs.fibonacci10));
-								
 								break;
 							case "progMinimo":
 								System.out.println(processManager.createProcess(progs.progMinimo));

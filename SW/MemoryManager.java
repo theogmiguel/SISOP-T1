@@ -19,16 +19,19 @@ public class MemoryManager {
 
     public int[] allocate(int wordNumber){
 
-        ArrayList<Integer> neededFrames = new ArrayList<>();
+        ArrayList<Integer> freeFrames = new ArrayList<>();
+        int requiredFrames = (int)Math.ceil(wordNumber/(partitionSize*1.0));
 
-        for (int i = 0; i < memory.frames.length; i++) {
-            if(memory.frames[i] == true) neededFrames.add(i);
+        for (int i = 0; i < memory.frames.length && requiredFrames != 0; i++) {
+            if(memory.frames[i] == true) freeFrames.add(i);
+            requiredFrames--;
         }
 
-        if(neededFrames.size() != 0) return new int[0];
+        if(requiredFrames != 0) return new int[0];
+
         else{
-            neededFrames.forEach((value) -> memory.frames[value] = false);
-            return neededFrames.stream().mapToInt(i -> i).toArray();
+            freeFrames.forEach((value) -> memory.frames[value] = false);
+            return freeFrames.stream().mapToInt(i -> i).toArray();
         }
     } 
 
