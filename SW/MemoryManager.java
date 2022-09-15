@@ -23,8 +23,10 @@ public class MemoryManager {
         int requiredFrames = (int)Math.ceil(wordNumber/(partitionSize*1.0));
 
         for (int i = 0; i < memory.frames.length && requiredFrames != 0; i++) {
-            if(memory.frames[i] == true) freeFrames.add(i);
-            requiredFrames--;
+                if(memory.frames[i] == true){
+                    freeFrames.add(i);
+                    requiredFrames--;   
+                }
         }
 
         if(requiredFrames != 0) return new int[0];

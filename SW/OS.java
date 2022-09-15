@@ -50,7 +50,7 @@ public class OS {
 						}
 						break;
 					case "lista":
-						System.out.println(processManager.pcbList);
+						System.out.println(processManager.pcbList.keySet());
 						break;
 					case "dump":
 						break;

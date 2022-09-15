@@ -11,12 +11,16 @@ public class ProcessManager {
         public int id;
         public int[] partitions;
         public int programCounter;
+        public int base;
+        public int limit;
 
         public PCB(){
             id = pcbId;
             pcbId++;
             partitions = new int[0];
             programCounter = 0;
+            base = 0;
+            limit = 0;
         }
 
     }
@@ -47,6 +51,9 @@ public class ProcessManager {
         memoryManager.loadProgram(program, allocation);
 
         PCB newPCB = new PCB();
+        newPCB.programCounter = memoryManager.translate(0, allocation);
+        newPCB.base = newPCB.programCounter;
+        newPCB.limit = memoryManager.translate(program.length, allocation);
         newPCB.partitions = allocation;
 
         pcbList.put(newPCB.id, newPCB);
@@ -76,7 +83,7 @@ public class ProcessManager {
           System.out.println("Processo inexistente");
           return; 
         }
-        cpu.setContext(0, memoryManager.memSize-1, 0);
+        cpu.setContext(0, memoryManager.memSize-1, process.programCounter);
         cpu.run();
 
     }
