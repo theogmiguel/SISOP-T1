@@ -55,6 +55,7 @@ public class OS {
 					case "dump":
 						break;
 					case "desaloca":
+						processManager.deallocateProcess(Integer.parseInt(inputList[1]));
 						break;
 					case "dumpM":
 						break;

@@ -43,8 +43,8 @@ public class CPU {
     }
     
     private boolean legal(int e) {                             // todo acesso a memoria tem que ser verificado
-        // ????
-        return true;
+        if(e<=limite) return true;
+        else return false;
     }
 
     private boolean testOverflow(int v) {                       // toda operacao matematica deve avaliar se ocorre overflow                      
@@ -67,7 +67,7 @@ public class CPU {
            // --------------------------------------------------------------------------------------------------
            // FETCH
             if (legal(pc)) { 	// pc valido
-                ir = m[pc]; 	// <<<<<<<<<<<<           busca posicao da memoria apontada por pc, guarda em ir
+                ir = m[base+pc]; 	// <<<<<<<<<<<<           busca posicao da memoria apontada por pc, guarda em ir
                 if (debug) { System.out.print("                               pc: "+pc+"       exec: ");  mem.dump(ir); }
            // --------------------------------------------------------------------------------------------------
            // EXECUTA INSTRUCAO NO ir

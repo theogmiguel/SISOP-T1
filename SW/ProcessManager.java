@@ -51,8 +51,7 @@ public class ProcessManager {
         memoryManager.loadProgram(program, allocation);
 
         PCB newPCB = new PCB();
-        newPCB.programCounter = memoryManager.translate(0, allocation);
-        newPCB.base = newPCB.programCounter;
+        newPCB.base = memoryManager.translate(0, allocation);
         newPCB.limit = memoryManager.translate(program.length, allocation);
         newPCB.partitions = allocation;
 
@@ -65,7 +64,10 @@ public class ProcessManager {
     public void deallocateProcess(int id){
 
         PCB pcb = pcbList.get(id);
-        if(pcb == null) return;
+        if(pcb == null){
+            System.out.println("Processo inexistente");
+            return; 
+        } 
 
         memoryManager.deallocate(pcb.partitions);
 
@@ -83,8 +85,26 @@ public class ProcessManager {
           System.out.println("Processo inexistente");
           return; 
         }
-        cpu.setContext(0, memoryManager.memSize-1, process.programCounter);
+
+        process = readyList.remove(processId);
+
+        if (process == null){
+            System.out.println("Processo ocupado");
+            return; 
+        }
+
+        if (processId == runningPCB){
+            System.out.println("Processo em execução");
+            return;
+        }
+
+        runningPCB = processId;
+
+        cpu.setContext(process.base, process.limit, process.programCounter);
         cpu.run();
+
+        readyList.put(processId, process);
+        runningPCB = 0;
 
     }
 }
