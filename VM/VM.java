@@ -12,12 +12,12 @@ public class VM {
     public static final Programs progs = new Programs();
 
     public Memory mem;
-    public CPU cpu;
+    public CPU cpu; 
     public OS system;
 
     public VM() {
         mem = new Memory(MEMORY_SIZE, PARTITION_SIZE);
-        cpu = new CPU(mem, true);
+        cpu = new CPU(mem, true );
         system = new OS(mem, cpu, progs);
     }
 

@@ -35,11 +35,14 @@ public class OS {
 							case "fatorial":
 								System.out.println(processManager.createProcess(progs.fatorial));
 								break;
-							case "fatorialTRAP":
-								System.out.println(processManager.createProcess(progs.fibonacci10));
+							case "fatorialV2":
+								System.out.println(processManager.createProcess(progs.fatorialV2));
 								break;
-							case "fibonacciTRAP":
-								System.out.println(processManager.createProcess(progs.fibonacci10));
+							case "fibonacci10v2":
+								System.out.println(processManager.createProcess(progs.fibonacci10v2));
+								break;
+							case "fibonacciREAD":
+								System.out.println(processManager.createProcess(progs.fibonacciREAD));
 								break;
 							case "PC":
 								System.out.println(processManager.createProcess(progs.PC));
@@ -52,19 +55,11 @@ public class OS {
 					case "lista":
 						System.out.println(processManager.pcbList.keySet());
 						break;
-					case "dump":
-						break;
 					case "desaloca":
 						processManager.deallocateProcess(Integer.parseInt(inputList[1]));
 						break;
-					case "dumpM":
-						break;
 					case "executa":
 						processManager.executeProcess(Integer.parseInt(inputList[1]));
-						break;
-					case "traceOn":
-						break;
-					case "traceOff":
 						break;
 					case "exit":
 						System.exit(0);
@@ -76,25 +71,4 @@ public class OS {
 			}
 		}
 	}
-
-    /*public void loadProgram(Word[] p, Word[] m) {
-		for (int i = 0; i < p.length; i++) {
-			m[i].opc = p[i].opc;     m[i].r1 = p[i].r1;     m[i].r2 = p[i].r2;     m[i].p = p[i].p;
-		}
-	}
-
-	public void loadProgram(Word[] p) {
-		loadProgram(p, mem.m);
-	}
-
-	public void loadAndExec(Word[] p){
-		loadProgram(p);    // carga do programa na memoria
-				System.out.println("---------------------------------- programa carregado na memoria");
-				mem.dump(0, p.length);            // dump da memoria nestas posicoes				
-		cpu.setContext(0, VM.MEMORY_SIZE - 1, 0);      // seta estado da cpu ]
-				System.out.println("---------------------------------- inicia execucao ");
-		cpu.run();                                // cpu roda programa ate parar	
-				System.out.println("---------------------------------- memoria após execucao ");
-				mem.dump(0, p.length);            // dump da memoria com resultado
-	}*/
 }

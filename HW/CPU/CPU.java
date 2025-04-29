@@ -1,5 +1,8 @@
 package HW.CPU;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 import HW.Memory.Memory;
 import HW.Memory.Word;
 
@@ -17,8 +20,8 @@ public class CPU {
                         // nas proximas versoes isto pode modificar
 
     private Memory mem;               // mem tem funcoes de dump e o array m de memória 'fisica' 
-    private Word[] m;                 // CPU acessa MEMORIA, guarda referencia a 'm'. m nao muda. semre será um array de palavras
-
+    private Word[] m; 
+                    // CPU acessa MEMORIA, guarda referencia a 'm'. m nao muda. semre será um array de palavras
     private boolean debug;            // se true entao mostra cada instrucao em execucao
                     
     public CPU(Memory _mem, boolean _debug) {     // ref a MEMORIA e interrupt handler passada na criacao da CPU
@@ -27,18 +30,18 @@ public class CPU {
         mem = _mem;	            // usa mem para acessar funcoes auxiliares (dump)
         m = mem.m; 				// usa o atributo 'm' para acessar a memoria.
         reg = new int[10]; 		// aloca o espaço dos registradores - regs 8 e 9 usados somente para IO
-        debug =  _debug;        // se true, print da instrucao em execucao
+        debug =  _debug;   // se true, print da instrucao em execucao
     }
 
     public CPU(Memory _mem, int _frameSize){
         mem = _mem;
     }
 
-    public void trap() {   // apenas avisa - todas interrupcoes neste momento finalizam o programa
+    private void trap() {   // apenas avisa - todas interrupcoes neste momento finalizam o programa
         System.out.println("Chamada de Sistema com op  /  par:  "+ reg[8] + " / " + reg[9]);
     }
 
-    public void interrupt(Interrupts irpt, int pc) {   // apenas avisa - todas interrupcoes neste momento finalizam o programa
+    private void interrupt(Interrupts irpt, int pc) {   // apenas avisa - todas interrupcoes neste momento finalizam o programa
         System.out.println("                                               Interrupcao "+ irpt+ "   pc: "+pc);
     }
     
@@ -60,6 +63,53 @@ public class CPU {
         limite = _limite;									   // agora,  setamos somente os registradores base,
         pc = _pc;                                              // limite e pc (deve ser zero nesta versao)
         irpt = Interrupts.noInterrupt;                         // reset da interrupcao registrada
+    }
+
+    private void handleSyscall() {
+        int operation = reg[8]; // Syscall code in R8
+        int arg = reg[9];        // Argument in R9
+
+        System.out.print(">>> SYSCALL: Operation=" + operation);
+
+        switch (operation) {
+            case 1: // Input
+                System.out.println(" (Input Request)");
+                try {
+                    Scanner sc = new Scanner(System.in);
+                    System.out.print("INPUT (para R9=" + arg + "): ");
+                    int inputValue = sc.nextInt();
+                    int enderecoFisico = base + arg; // simples: base + lógico
+
+                    if (legal(arg)) { // testando limite lógico
+                        mem.m[enderecoFisico].opc = Opcode.DATA;
+                        mem.m[enderecoFisico].p = inputValue;
+                        System.out.println("    Input " + inputValue + " armazenado em M[" + enderecoFisico + "]");
+                    } else {
+                        System.err.println("    Falha ao armazenar input: endereco invalido.");
+                        irpt = Interrupts.intEnderecoInvalido;
+                    }
+                } catch (InputMismatchException e) {
+                    System.err.println("    Erro de Input: valor nao inteiro digitado.");
+                    irpt = Interrupts.intInstrucaoInvalida;
+                }
+                break;
+
+            case 2: // Output
+                int enderecoFisicoOut = base + arg;
+
+                if (legal(arg)) {
+                    System.out.println("\nOUTPUT: " + mem.m[enderecoFisicoOut].p);
+                } else {
+                    System.err.println("\n    Falha no Output: endereco invalido.");
+                    irpt = Interrupts.intEnderecoInvalido;
+                }
+                break;
+
+            default:
+                System.out.println(" (Codigo de Operacao Invalido: " + operation + ")");
+                irpt = Interrupts.intInstrucaoInvalida;
+                break;
+        }
     }
     
     public void run() { 		// execucao da CPU supoe que o contexto da CPU, vide acima, esta devidamente setado			
@@ -234,6 +284,13 @@ public class CPU {
                                 pc++;
                             }
                          break; 
+                        
+                    case SYSCALL:
+                        handleSyscall(); // Handle system call
+                        // Assuming syscall might modify state but doesn't necessarily stop CPU
+                        pc++; // Increment PC after syscall completes
+                        // Note: If syscall needs to block/yield, much more logic is needed
+                        break;
 
                 // outras
                     case STOP: // por enquanto, para execucao
