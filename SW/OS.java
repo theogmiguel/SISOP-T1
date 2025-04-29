@@ -58,9 +58,12 @@ public class OS {
 					case "desaloca":
 						processManager.deallocateProcess(Integer.parseInt(inputList[1]));
 						break;
-					case "executa":
+					case "execute":
 						processManager.executeProcess(Integer.parseInt(inputList[1]));
 						break;
+                    case "executeAll":
+                        processManager.executeAllProcesses();
+                        break;
 					case "exit":
 						System.exit(0);
 						break;

@@ -1,6 +1,8 @@
 package SW;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import HW.CPU.CPU;
 import HW.Memory.Word;
@@ -24,8 +26,8 @@ public class ProcessManager {
         }
 
     }
-    
-    private int pcbId;    
+
+    private int pcbId;
     private CPU cpu;
     private MemoryManager memoryManager;
     public HashMap<Integer, PCB> pcbList;
@@ -66,8 +68,8 @@ public class ProcessManager {
         PCB pcb = pcbList.get(id);
         if(pcb == null){
             System.out.println("Processo inexistente");
-            return; 
-        } 
+            return;
+        }
 
         memoryManager.deallocate(pcb.partitions);
 
@@ -83,14 +85,14 @@ public class ProcessManager {
 
         if (process == null){
           System.out.println("Processo inexistente");
-          return; 
+          return;
         }
 
         process = readyList.remove(processId);
 
         if (process == null){
             System.out.println("Processo ocupado");
-            return; 
+            return;
         }
 
         if (processId == runningPCB){
@@ -106,5 +108,12 @@ public class ProcessManager {
         readyList.put(processId, process);
         runningPCB = 0;
 
+    }
+
+    public void executeAllProcesses() {
+        List<Integer> processIds = new ArrayList<>(readyList.keySet());
+        for (int id : processIds) {
+            executeProcess(id);
+        }
     }
 }
